@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget,QMainWindow,QMenu,QSystemTrayIcon
-from PyQt5.QtCore import Qt, QPoint,QTimer,pyqtSignal,QThread
+from PyQt5.QtCore import Qt, QPoint,QTimer,pyqtSignal,QThread,QPropertyAnimation
 from PyQt5.QtGui import QPixmap,QCursor,QIcon
 from bubble import SpeechBubble
 from util import chat_util,logger
@@ -72,7 +72,7 @@ class DesktopPet(QWidget):
         self.move(pos)  # 主线程执行实际的窗口移动
 
     def mouseDoubleClickEvent(self, event):
-        asyncio.run(chat_util.easy_to_send("你好"))
+        asyncio.run(chat_util.easy_to_send("(这是一个类似于摸摸头的友善动作)"))
 
     #调用气泡显示的方法
     def show_message(self, text):
@@ -88,6 +88,25 @@ class DesktopPet(QWidget):
         
         # 托盘菜单
         tray_menu = QMenu()
+        tray_menu.setStyleSheet("""
+            QMenu {
+                background-color: #f0f0f0;  /* 背景色 */
+                border: 1px solid #ccc;    /* 边框 */
+                border-radius: 5px;       /* 圆角 */
+                padding: 5px;             /* 内边距 */
+            }
+            QMenu::item {
+                padding: 5px 20px;        /* 菜单项内边距 */
+                color: #333;              /* 文字颜色 */
+            }
+            QMenu::item:selected {
+                background-color: #4CAF50; /* 选中项背景 */
+                color: white;             /* 选中项文字颜色 */
+            }
+            QMenu::item:disabled {
+                color: #999;             /* 禁用项颜色 */
+            }
+        """)
         show_action = tray_menu.addAction("显示宠物")
         show_action.triggered.connect(self.show_pet)
         exit_action = tray_menu.addAction("退出")
@@ -96,17 +115,36 @@ class DesktopPet(QWidget):
         self.tray_icon.show()
 
     def contextMenuEvent(self, event):
-        """右键菜单"""
         menu = QMenu(self)
         
+        # 设置菜单样式（QSS）
+        menu.setStyleSheet("""
+            QMenu {
+                background-color: #f0f0f0;  /* 背景色 */
+                border: 1px solid #ccc;    /* 边框 */
+                border-radius: 5px;       /* 圆角 */
+                padding: 5px;             /* 内边距 */
+            }
+            QMenu::item {
+                padding: 5px 20px;        /* 菜单项内边距 */
+                color: #333;              /* 文字颜色 */
+            }
+            QMenu::item:selected {
+                background-color: #4CAF50; /* 选中项背景 */
+                color: white;             /* 选中项文字颜色 */
+            }
+            QMenu::item:disabled {
+                color: #999;             /* 禁用项颜色 */
+            }
+        """)
+        
         # 添加菜单项
-        hide_action = menu.addAction("隐藏宠物")
+        hide_action = menu.addAction("🐾 隐藏宠物")
+        show_action = menu.addAction("✨ 显示宠物")
+        exit_action = menu.addAction("❌ 退出")
+        
         hide_action.triggered.connect(self.hide_pet)
-        
-        show_action = menu.addAction("显示宠物")
         show_action.triggered.connect(self.show_pet)
-        
-        exit_action = menu.addAction("退出")
         exit_action.triggered.connect(QApplication.quit)
         
         menu.exec_(event.globalPos())
