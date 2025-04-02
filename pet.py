@@ -1,12 +1,17 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget,QMainWindow,QMenu,QSystemTrayIcon
-from PyQt5.QtCore import Qt, QPoint,QTimer,pyqtSignal,QThread,QPropertyAnimation
+from PyQt5.QtCore import Qt, QPoint,QTimer,pyqtSignal,QThread,QPropertyAnimation,QEasingCurve,QSize
 from PyQt5.QtGui import QPixmap,QCursor,QIcon
+from qasync import asyncSlot
+
+from bubble_menu import BubbleMenu
 from bubble import SpeechBubble
 from util import chat_util,logger
+
+
 import asyncio
 import sys
 import time
-from qasync import asyncSlot
+
 
 app = QApplication(sys.argv)
 
@@ -18,6 +23,8 @@ class DesktopPet(QWidget):
         #气泡相关
         self.bubble = SpeechBubble(self)
         self.bubble.hide()
+        self.bubble_menu = BubbleMenu()
+        # self.bubble_menu.hide()
 
         self._move_worker = None  # 工作线程引用
 
@@ -51,12 +58,13 @@ class DesktopPet(QWidget):
         if event.button() == Qt.LeftButton:
             # 计算初始偏移量(光标位置与窗口左上角的差值)
             self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
-            
+
             # 创建并启动工作线程
             self._move_worker = MoveWorker(self.drag_start_position)
             self._move_worker.position_changed.connect(self._on_position_changed)
             self._move_worker.start()
             event.accept()
+
     
     def mouseReleaseEvent(self, event):
         """鼠标释放时停止工作线程"""
@@ -74,7 +82,6 @@ class DesktopPet(QWidget):
     def mouseDoubleClickEvent(self, event):
         asyncio.run(chat_util.easy_to_send("(这是一个类似于摸摸头的友善动作)"))
 
-    #调用气泡显示的方法
     def show_message(self, text):
         """公开方法：显示气泡消息"""
         self.bubble.show_message(text)
@@ -114,40 +121,40 @@ class DesktopPet(QWidget):
         self.tray_icon.setContextMenu(tray_menu)
         self.tray_icon.show()
 
-    def contextMenuEvent(self, event):
-        menu = QMenu(self)
+    # def contextMenuEvent(self, event):
+    #     menu = QMenu(self)
         
-        # 设置菜单样式（QSS）
-        menu.setStyleSheet("""
-            QMenu {
-                background-color: #f0f0f0;  /* 背景色 */
-                border: 1px solid #ccc;    /* 边框 */
-                border-radius: 5px;       /* 圆角 */
-                padding: 5px;             /* 内边距 */
-            }
-            QMenu::item {
-                padding: 5px 20px;        /* 菜单项内边距 */
-                color: #333;              /* 文字颜色 */
-            }
-            QMenu::item:selected {
-                background-color: #4CAF50; /* 选中项背景 */
-                color: white;             /* 选中项文字颜色 */
-            }
-            QMenu::item:disabled {
-                color: #999;             /* 禁用项颜色 */
-            }
-        """)
+    #     # 设置菜单样式（QSS）
+    #     menu.setStyleSheet("""
+    #         QMenu {
+    #             background-color: #f0f0f0;  /* 背景色 */
+    #             border: 1px solid #ccc;    /* 边框 */
+    #             border-radius: 5px;       /* 圆角 */
+    #             padding: 5px;             /* 内边距 */
+    #         }
+    #         QMenu::item {
+    #             padding: 5px 20px;        /* 菜单项内边距 */
+    #             color: #333;              /* 文字颜色 */
+    #         }
+    #         QMenu::item:selected {
+    #             background-color: #4CAF50; /* 选中项背景 */
+    #             color: white;             /* 选中项文字颜色 */
+    #         }
+    #         QMenu::item:disabled {
+    #             color: #999;             /* 禁用项颜色 */
+    #         }
+    #     """)
         
-        # 添加菜单项
-        hide_action = menu.addAction("🐾 隐藏宠物")
-        show_action = menu.addAction("✨ 显示宠物")
-        exit_action = menu.addAction("❌ 退出")
+    #     # 添加菜单项
+    #     hide_action = menu.addAction("🐾 隐藏宠物")
+    #     show_action = menu.addAction("✨ 显示宠物")
+    #     exit_action = menu.addAction("❌ 退出")
         
-        hide_action.triggered.connect(self.hide_pet)
-        show_action.triggered.connect(self.show_pet)
-        exit_action.triggered.connect(QApplication.quit)
+    #     hide_action.triggered.connect(self.hide_pet)
+    #     show_action.triggered.connect(self.show_pet)
+    #     exit_action.triggered.connect(QApplication.quit)
         
-        menu.exec_(event.globalPos())
+    #     menu.exec_(event.globalPos())
 
     def hide_pet(self):
         """隐藏宠物（图片 + 任务栏）"""
@@ -163,6 +170,30 @@ class DesktopPet(QWidget):
         # self.setWindowFlags(self.windowFlags() & ~Qt.Tool)
         # self.show()
 
+    def contextMenuEvent(self, event):
+        menu = BubbleMenu(self)
+        
+        actions = [
+            ("🐾 隐藏", self.hide),
+            ("✨ 显示", self.show),
+            ("❌ 退出", QApplication.quit),
+        ]
+
+        for text, callback in actions:
+            action = menu.addAction(text)
+            action.triggered.connect(callback)
+
+        menu.exec_(event.globalPos()) 
+
+
+    def add_hover_animation(self, action):
+        """为菜单项添加悬停动画"""
+        animation = QPropertyAnimation(action, b"iconSize")
+        animation.setDuration(200)
+        animation.setEasingCurve(QEasingCurve.OutQuad)
+        animation.setStartValue(QSize(16, 16))
+        animation.setEndValue(QSize(20, 20))
+        action.hovered.connect(animation.start)
 
 
 class MoveWorker(QThread):
