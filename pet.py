@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget,QMainWindow
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget,QMainWindow,QMenu,QSystemTrayIcon
 from PyQt5.QtCore import Qt, QPoint,QTimer,pyqtSignal,QThread
-from PyQt5.QtGui import QPixmap,QCursor
+from PyQt5.QtGui import QPixmap,QCursor,QIcon
 from bubble import SpeechBubble
 from util import chat_util,logger
 import asyncio
@@ -13,8 +13,16 @@ app = QApplication(sys.argv)
 class DesktopPet(QWidget):
     def __init__(self):
         super().__init__()
-        
-        # 设置窗口属性
+        self.init_ui()
+        self.init_tray_icon()
+        #气泡相关
+        self.bubble = SpeechBubble(self)
+        self.bubble.hide()
+
+        self._move_worker = None  # 工作线程引用
+
+    def init_ui(self):
+                # 设置窗口属性
         self.setWindowFlags(
             Qt.FramelessWindowHint |  # 无边框
             Qt.WindowStaysOnTopHint |  # 始终在最前
@@ -38,13 +46,6 @@ class DesktopPet(QWidget):
         y = screen_geo.height() - self.height() - 20  # 下边距20px
         self.move(x, y)
 
-        #气泡相关
-        self.bubble = SpeechBubble(self)
-        self.bubble.hide()
-
-        self._move_worker = None  # 工作线程引用
-
-    
     def mousePressEvent(self, event):
         """鼠标按下时创建工作线程"""
         if event.button() == Qt.LeftButton:
@@ -78,6 +79,53 @@ class DesktopPet(QWidget):
         """公开方法：显示气泡消息"""
         self.bubble.show_message(text)
         QTimer.singleShot(2000, self.bubble.fade_out) 
+
+    def init_tray_icon(self):
+        """初始化系统托盘图标（可选）"""
+        self.tray_icon = QSystemTrayIcon(self)
+        self.tray_icon.setIcon(QIcon("./img/maim.png"))  # 托盘图标
+        self.tray_icon.setToolTip("桌面宠物")
+        
+        # 托盘菜单
+        tray_menu = QMenu()
+        show_action = tray_menu.addAction("显示宠物")
+        show_action.triggered.connect(self.show_pet)
+        exit_action = tray_menu.addAction("退出")
+        exit_action.triggered.connect(QApplication.quit)
+        self.tray_icon.setContextMenu(tray_menu)
+        self.tray_icon.show()
+
+    def contextMenuEvent(self, event):
+        """右键菜单"""
+        menu = QMenu(self)
+        
+        # 添加菜单项
+        hide_action = menu.addAction("隐藏宠物")
+        hide_action.triggered.connect(self.hide_pet)
+        
+        show_action = menu.addAction("显示宠物")
+        show_action.triggered.connect(self.show_pet)
+        
+        exit_action = menu.addAction("退出")
+        exit_action.triggered.connect(QApplication.quit)
+        
+        menu.exec_(event.globalPos())
+
+    def hide_pet(self):
+        """隐藏宠物（图片 + 任务栏）"""
+        self.hide()  # 隐藏窗口
+        # 如果不需要托盘图标，可以完全隐藏：
+        # self.setWindowFlags(self.windowFlags() | Qt.Tool)
+        # self.show()  # 必须重新调用 show() 使 flags 生效
+
+    def show_pet(self):
+        """显示宠物"""
+        self.show()  # 显示窗口
+        # 恢复任务栏图标（如果需要）：
+        # self.setWindowFlags(self.windowFlags() & ~Qt.Tool)
+        # self.show()
+
+
 
 class MoveWorker(QThread):
     position_changed = pyqtSignal(QPoint)  # 定义信号，用于传递新位置
