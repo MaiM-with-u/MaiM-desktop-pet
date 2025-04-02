@@ -20,10 +20,7 @@ class SpeechBubble(QLabel):
         
         # 字体设置
         self.setFont(QFont("Microsoft YaHei", 10))
-        
-        # 自动消失定时器
-        self.hide_timer = QTimer(self)
-        self.hide_timer.timeout.connect(self.fade_out)
+
         
     def paintEvent(self, event):
         painter = QPainter(self)
@@ -68,7 +65,7 @@ class SpeechBubble(QLabel):
         
         return QSize(actual_width, height)
 
-    def show_message(self, text, duration=2):
+    def show_message(self, text):
         """显示气泡消息"""
 
         self.setText(text)
@@ -84,9 +81,6 @@ class SpeechBubble(QLabel):
         
         self.show()
         
-        # 设置自动隐藏
-        if duration > 0:
-            self.hide_timer.start(duration)
 
     def fade_out(self):
         
@@ -97,25 +91,25 @@ class SpeechBubble(QLabel):
         self.hide()
         anim.start()
 
-    def update_position(self):
-        if not self.parent():
-            return
+    # def update_position(self):
+    #     if not self.parent():
+    #         return
 
-        parent_rect = self.parent().geometry()
-        screen_geo = QApplication.primaryScreen().availableGeometry()
+    #     parent_rect = self.parent().geometry()
+    #     screen_geo = QApplication.primaryScreen().availableGeometry()
 
-        # 基础位置计算（正上方）
-        bubble_x = parent_rect.center().x() - self.width() // 2
-        bubble_y = parent_rect.top() - self.height() + 10  # 稍微重叠避免分离
+    #     # 基础位置计算（正上方）
+    #     bubble_x = parent_rect.center().x() - self.width() // 2
+    #     bubble_y = parent_rect.top() - self.height() + 10  # 稍微重叠避免分离
 
-        # 避障逻辑（如果上方空间不足则显示在下方）
-        if bubble_y < 0:
-            bubble_y = parent_rect.bottom() - 10
+    #     # 避障逻辑（如果上方空间不足则显示在下方）
+    #     if bubble_y < 0:
+    #         bubble_y = parent_rect.bottom() - 10
 
-        # 水平边界检查
-        if bubble_x < 0:
-            bubble_x = 0
-        elif bubble_x + self.width() > screen_geo.width():
-            bubble_x = screen_geo.width() - self.width()
+    #     # 水平边界检查
+    #     if bubble_x < 0:
+    #         bubble_x = 0
+    #     elif bubble_x + self.width() > screen_geo.width():
+    #         bubble_x = screen_geo.width() - self.width()
 
-        self.move(QPoint(bubble_x, bubble_y))
+    #     self.move(QPoint(bubble_x, bubble_y))

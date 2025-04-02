@@ -1,10 +1,12 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget,QMainWindow
-from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtCore import Qt, QPoint,QTimer
 from PyQt5.QtGui import QPixmap
 from bubble import SpeechBubble
-from util import chat_util
+from util import chat_util,logger
 import asyncio
 import sys
+import time
+from qasync import asyncSlot
 
 app = QApplication(sys.argv)
 
@@ -36,44 +38,45 @@ class DesktopPet(QWidget):
         y = screen_geo.height() - self.height() - 20  # 下边距20px
         self.move(x, y)
 
+        #气泡相关
+        self.bubble = SpeechBubble(self)
+        self.bubble.hide()
+
 
         # 拖拽相关变量
         self.drag_start_position = None
 
-        #气泡相关
-        self.bubble = SpeechBubble(self)
-        self.bubble.hide()
     
+    #鼠标按下
     def mousePressEvent(self, event):
         """鼠标按下事件"""
         if event.button() == Qt.LeftButton:
             self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
             event.accept()
     
+    #鼠标移动
     def mouseMoveEvent(self, event):
         """鼠标移动事件"""
         if event.buttons() == Qt.LeftButton and self.drag_start_position is not None:
             self.move(event.globalPos() - self.drag_start_position)
             event.accept()
-        if self.bubble.isVisible():
-            self.bubble.update_position()
     
+    #鼠标释放
     def mouseReleaseEvent(self, event):
         """鼠标释放事件"""
         if event.button() == Qt.LeftButton:
             self.drag_start_position = None
             event.accept()
 
-    def show_message(self, text, duration=2):
-        """公开方法：显示气泡消息"""
-        self.bubble.show_message(text, duration)
-
+    #鼠标双击
     def mouseDoubleClickEvent(self, event):
         asyncio.run(chat_util.easy_to_send("你好"))
 
-    def sync_bubble_position(self):
-        """同步气泡位置"""
-        if self.bubble.isVisible():
-            self.bubble.update_position()
+    #调用气泡显示的方法
+    def show_message(self, text):
+        """公开方法：显示气泡消息"""
+        self.bubble.show_message(text)
+        QTimer.singleShot(2000, self.bubble.fade_out) 
+
 
 chat_pet = DesktopPet()
