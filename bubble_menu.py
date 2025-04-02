@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QMenu, QWidget, QLabel
-from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation, QEasingCurve
+from PyQt5.QtWidgets import QApplication, QMenu, QWidget, QLabel,QVBoxLayout,QLineEdit,QDialog,QDialogButtonBox,QMessageBox
+from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
 from PyQt5.QtGui import QColor, QPainter, QPainterPath
 
 class BubbleMenu(QMenu):
@@ -37,4 +37,5 @@ class BubbleMenu(QMenu):
         
         painter.fillPath(path, QColor(255, 255, 255))
         super().paintEvent(event)
+
 
