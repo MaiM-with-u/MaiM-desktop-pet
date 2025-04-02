@@ -27,6 +27,7 @@ class DesktopPet(QWidget):
         # self.bubble_menu.hide()
 
         self._move_worker = None  # 工作线程引用
+        
 
     def init_ui(self):
                 # 设置窗口属性
@@ -65,7 +66,6 @@ class DesktopPet(QWidget):
             self._move_worker.start()
             event.accept()
 
-    
     def mouseReleaseEvent(self, event):
         """鼠标释放时停止工作线程"""
         if event.button() == Qt.LeftButton and self._move_worker:
@@ -184,7 +184,6 @@ class DesktopPet(QWidget):
             action.triggered.connect(callback)
 
         menu.exec_(event.globalPos()) 
-
 
     def add_hover_animation(self, action):
         """为菜单项添加悬停动画"""
