@@ -28,6 +28,11 @@ class DesktopPet(QWidget):
 
         self._move_worker = None  # 工作线程引用
 
+        #
+        self.thinktimer = QTimer(self)
+        self.thinktimer.timeout.connect(self._on_timer_triggered)  # 连接信号
+        self.thinktimer.start(60 * 1000)  # 60秒（单位：毫秒）
+
     def init_ui(self):
                 # 设置窗口属性
         self.setWindowFlags(
@@ -84,7 +89,7 @@ class DesktopPet(QWidget):
     def show_message(self, text):
         """公开方法：显示气泡消息"""
         self.bubble.show_message(text)
-        QTimer.singleShot(2000, self.bubble.fade_out) 
+        QTimer.singleShot(len(text)*1000, self.bubble.fade_out) 
 
     def init_tray_icon(self):
         """初始化系统托盘图标（可选）"""
@@ -186,7 +191,6 @@ class DesktopPet(QWidget):
 
         menu.exec_(event.globalPos()) 
 
-
     def add_hover_animation(self, action):
         """为菜单项添加悬停动画"""
         animation = QPropertyAnimation(action, b"iconSize")
@@ -196,6 +200,13 @@ class DesktopPet(QWidget):
         animation.setEndValue(QSize(20, 20))
         action.hovered.connect(animation.start)
 
+    def _on_timer_triggered(self):
+        """定时器触发时执行的函数"""
+        print("60秒定时器触发！")
+        asyncio.run(chat_util.easy_to_send("你现在在想什么呢"))
+        # 这里添加你的业务逻辑，例如：
+        # self.check_updates()
+        # self.auto_save()
 
 class MoveWorker(QThread):
     position_changed = pyqtSignal(QPoint)  # 定义信号，用于传递新位置
