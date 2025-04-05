@@ -94,7 +94,8 @@ class BubbleInput(QWidget):
         self.close()
 
     def close(self):
-        self.anim.finished.connect(super().close)
+        self.input_field.clear()
+        super().close()
         self.anim.setStartValue(1.0)
         self.anim.setEndValue(0.0)
         self.anim.start()
