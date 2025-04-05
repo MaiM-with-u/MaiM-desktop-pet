@@ -1,7 +1,8 @@
 # views/bubble.py
-from PyQt5.QtWidgets import QLabel, QWidget,QApplication
-from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QPoint,QSize,QRect
+from PyQt5.QtWidgets import QLabel,QApplication
+from PyQt5.QtCore import Qt, QPropertyAnimation, QPoint,QSize
 from PyQt5.QtGui import QPainter, QColor, QFont,QPainterPath
+
 
 class SpeechBubble(QLabel):
     def __init__(self, parent=None):
@@ -19,9 +20,8 @@ class SpeechBubble(QLabel):
         self.follow_offset = QPoint(0, -50)  # 气泡相对于主体的偏移量
         
         # 字体设置
-        self.setFont(QFont("Microsoft YaHei", 10))
-
-        
+        self.setFont(QFont("Microsoft YaHei", 12))
+       
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
@@ -56,9 +56,9 @@ class SpeechBubble(QLabel):
         if text_width > max_width:
             actual_width = max_width
             # 计算换行后的高度
-            text_rect = metrics.boundingRect(QRect(0, 0, max_width, 0),
-                                            Qt.TextWordWrap, text)
-            height = text_rect.height() + 30
+            # text_rect = metrics.boundingRect(QRect(0, 0, max_width, 0),
+            #                                 Qt.TextWordWrap, text)
+            # height = text_rect.height() + 30
         else:
             actual_width = max(min_width, text_width + 20)
             height = metrics.height() + 20
@@ -76,12 +76,11 @@ class SpeechBubble(QLabel):
         if self.parent():
             parent_rect = self.parent().geometry()
             x = parent_rect.center().x() - self.width() // 2
-            y = parent_rect.top() - self.height() - 5
+            y = parent_rect.top() - self.height() + self.follow_offset.y()
             self.move(x, y)
         
         self.show()
         
-
     def fade_out(self):
         
         anim = QPropertyAnimation(self, b"windowOpacity")
@@ -91,25 +90,29 @@ class SpeechBubble(QLabel):
         self.hide()
         anim.start()
 
-    # def update_position(self):
-    #     if not self.parent():
-    #         return
-
-    #     parent_rect = self.parent().geometry()
-    #     screen_geo = QApplication.primaryScreen().availableGeometry()
-
-    #     # 基础位置计算（正上方）
-    #     bubble_x = parent_rect.center().x() - self.width() // 2
-    #     bubble_y = parent_rect.top() - self.height() + 10  # 稍微重叠避免分离
-
-    #     # 避障逻辑（如果上方空间不足则显示在下方）
-    #     if bubble_y < 0:
-    #         bubble_y = parent_rect.bottom() - 10
-
-    #     # 水平边界检查
-    #     if bubble_x < 0:
-    #         bubble_x = 0
-    #     elif bubble_x + self.width() > screen_geo.width():
-    #         bubble_x = screen_geo.width() - self.width()
-
-    #     self.move(QPoint(bubble_x, bubble_y))
+    def update_position(self):
+        if not self.parent() or not self.isVisible():
+            return
+        
+        parent_rect = self.parent().geometry()
+        screen_geo = QApplication.primaryScreen().availableGeometry()
+        
+        # 计算理想位置
+        ideal_x = parent_rect.center().x() - self.width() // 2
+        ideal_y = parent_rect.top() - self.height() + self.follow_offset.y()
+        
+        # 边界约束
+        new_x = max(screen_geo.left() + 5,  # 左边距5px
+                min(ideal_x, 
+                    screen_geo.right() - self.width() - 5))  # 右边距5px
+        
+        # 如果上方空间不足，改为显示在下方
+        if ideal_y < screen_geo.top():
+            new_y = parent_rect.bottom() - self.follow_offset.y()
+            self.arrow_height = -abs(self.arrow_height)  # 箭头朝下
+        else:
+            new_y = ideal_y
+            self.arrow_height = abs(self.arrow_height)  # 箭头朝上
+        
+        self.move(new_x, new_y)
+        self.update()  # 触发重绘以更新箭头方向

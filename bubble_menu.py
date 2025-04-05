@@ -1,5 +1,5 @@
-from PyQt5.QtWidgets import QApplication, QMenu, QWidget, QLabel,QVBoxLayout,QLineEdit,QDialog,QDialogButtonBox,QMessageBox
-from PyQt5.QtCore import Qt, QPoint, QPropertyAnimation
+from PyQt5.QtWidgets import QMenu
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor, QPainter, QPainterPath
 
 class BubbleMenu(QMenu):

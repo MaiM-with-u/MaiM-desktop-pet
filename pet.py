@@ -1,16 +1,16 @@
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget,QMainWindow,QMenu,QSystemTrayIcon
+from PyQt5.QtWidgets import QApplication, QLabel, QWidget,QMenu,QSystemTrayIcon
 from PyQt5.QtCore import Qt, QPoint,QTimer,pyqtSignal,QThread,QPropertyAnimation,QEasingCurve,QSize
 from PyQt5.QtGui import QPixmap,QCursor,QIcon
-from qasync import asyncSlot
 
 from bubble_menu import BubbleMenu
 from bubble import SpeechBubble
-from util import chat_util,logger
+from util import chat_util,logger  # noqa: F401
+from bubble_input import BubbleInput  # 新增导入
 
 
 import asyncio
 import sys
-import time
+import time # noqa: F401
 
 
 app = QApplication(sys.argv)
@@ -23,8 +23,12 @@ class DesktopPet(QWidget):
         #气泡相关
         self.bubble = SpeechBubble(self)
         self.bubble.hide()
+
         self.bubble_menu = BubbleMenu()
         # self.bubble_menu.hide()
+
+        self.bubble_input = BubbleInput(parent=self, on_send=self.handle_user_input)
+        self.bubble_input.hide()
 
         self._move_worker = None  # 工作线程引用
 
@@ -55,7 +59,7 @@ class DesktopPet(QWidget):
         # 设置初始位置和大小
         screen_geo = QApplication.primaryScreen().availableGeometry()  # 获取可用屏幕区域（排除任务栏）
         x = screen_geo.width() - self.width() - 20  # 右边距20px
-        y = screen_geo.height() - self.height() - 20  # 下边距20px
+        y = screen_geo.height() - self.height() - 80  # 下边距20px
         self.move(x, y)
 
     def mousePressEvent(self, event):
@@ -63,7 +67,7 @@ class DesktopPet(QWidget):
         if event.button() == Qt.LeftButton:
             # 计算初始偏移量(光标位置与窗口左上角的差值)
             self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
-
+        if event.button() == Qt.LeftButton and not self._move_worker:
             # 创建并启动工作线程
             self._move_worker = MoveWorker(self.drag_start_position)
             self._move_worker.position_changed.connect(self._on_position_changed)
@@ -82,6 +86,7 @@ class DesktopPet(QWidget):
     def _on_position_changed(self, pos):
         """接收工作线程发来的新位置并更新窗口"""
         self.move(pos)  # 主线程执行实际的窗口移动
+        self.bubble.update_position()
 
     def mouseDoubleClickEvent(self, event):
         asyncio.run(chat_util.easy_to_send("(这是一个类似于摸摸头的友善动作)"))
@@ -181,7 +186,7 @@ class DesktopPet(QWidget):
         
         actions = [
             ("🐾 隐藏", self.hide),
-            # ("✏️ 聊聊天", self.bubble_menu._show_input),  
+            ("✏️ 聊聊天", self.show_chat_input),  
             ("❌ 退出", QApplication.quit),
         ]
 
@@ -203,10 +208,29 @@ class DesktopPet(QWidget):
     def _on_timer_triggered(self):
         """定时器触发时执行的函数"""
         print("60秒定时器触发！")
-        asyncio.run(chat_util.easy_to_send("你现在在想什么呢"))
+        # asyncio.run(chat_util.easy_to_send("你现在在想什么呢"))
         # 这里添加你的业务逻辑，例如：
         # self.check_updates()
         # self.auto_save()
+
+    def show_chat_input(self):
+        """显示输入气泡"""
+        self.bubble_input.show()
+        self.bubble_input.update_position()
+        self.bubble_input.input_field.setFocus()
+
+    def _on_position_changed(self, pos):
+        """窗口移动时更新输入气泡位置"""
+        self.move(pos)
+        if self.bubble_input.isVisible():
+            self.bubble_input.update_position()
+
+    def handle_user_input(self, text):
+        """处理用户输入的回调函数"""
+        print(f"收到用户输入: {text}")
+        asyncio.run(chat_util.easy_to_send(str(text)))
+        # self.show_message(f"你说了: {text}")
+        # asyncio.run(chat_util.process_input(text))
 
 class MoveWorker(QThread):
     position_changed = pyqtSignal(QPoint)  # 定义信号，用于传递新位置
