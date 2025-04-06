@@ -1,0 +1,6 @@
+fastapi==0.115.12
+httpx==0.28.1
+pydantic==2.11.2
+PyQt5==5.15.11
+PyQt5_sip==12.17.0
+uvicorn==0.34.0

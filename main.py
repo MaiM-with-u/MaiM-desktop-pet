@@ -7,7 +7,7 @@ from pet import chat_pet,app
 from util import logger
 
 def run_fastapi():
-    uvicorn.run(fastapi, host="0.0.0.0", port=18002)
+    uvicorn.run(fastapi, host="0.0.0.0", port=18003)
 
 global_chat_pet = None
 
