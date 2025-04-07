@@ -1,6 +1,6 @@
 # views/bubble.py
 from PyQt5.QtWidgets import QLabel,QApplication
-from PyQt5.QtCore import Qt, QPropertyAnimation, QPoint,QSize
+from PyQt5.QtCore import Qt, QPropertyAnimation, QPoint,QSize,QRect
 from PyQt5.QtGui import QPainter, QColor, QFont,QPainterPath
 
 
@@ -56,9 +56,9 @@ class SpeechBubble(QLabel):
         if text_width > max_width:
             actual_width = max_width
             # 计算换行后的高度
-            # text_rect = metrics.boundingRect(QRect(0, 0, max_width, 0),
-            #                                 Qt.TextWordWrap, text)
-            # height = text_rect.height() + 30
+            text_rect = metrics.boundingRect(QRect(0, 0, max_width, 0),
+                                            Qt.TextWordWrap, text)
+            height = text_rect.height() + 30
         else:
             actual_width = max(min_width, text_width + 20)
             height = metrics.height() + 20
