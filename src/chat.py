@@ -1,18 +1,10 @@
 from maim_message import GroupInfo,UserInfo,Seg,MessageBase,BaseMessageInfo
-import logging
 import httpx
-from config import Config
+from src.config import Config
 import time
 from router import router
+from util.logger import logger
 
-logging.basicConfig(
-    level=logging.DEBUG,  # 设置日志级别
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[logging.StreamHandler()]  # 输出到控制台
-)
-# 创建logger
-logger = logging.getLogger('pet')
-logger.setLevel(logging.DEBUG)  # 设置日志级别
 client = httpx.AsyncClient(timeout=60)  # 创建异步HTTP客户端
 config = Config()
 
@@ -20,7 +12,7 @@ class chat:
     def __init__(self) -> None:
         self.client = httpx.AsyncClient(timeout=60)  # 创建异步HTTP客户端
 
-    async def easy_to_send (self,text : str):
+    async def easy_to_send (self,text : str,type:str):
         user_info = UserInfo(
             platform = config.platfrom,
             user_id=0,#反正得有
@@ -37,7 +29,7 @@ class chat:
             additional_config={"maimcore_reply_probability_gain": 1}
     )
         message_seg = Seg(
-            type = 'text',
+            type = type,
             data = text,  
             )
         

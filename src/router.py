@@ -1,5 +1,5 @@
 import asyncio
-from bubble_speech import bubble
+from signals import signals_bus
 from maim_message import (
     Router,
     RouteConfig,
@@ -11,7 +11,7 @@ from maim_message import (
 route_config = RouteConfig( 
     #根据TargetConfig类构建一个合法的route_config
     route_config={
-        "platform1": TargetConfig( 
+        "desktop-pet": TargetConfig( 
             url="ws://127.0.0.1:8000/ws",
             token=None,  # 如果需要token验证则在这里设置
         ),
@@ -55,13 +55,11 @@ async def message_handler(message):
     或者根据其他协议发送到其他平台
     """
     # 提取消息内容
+    print(f"收到消息: {message}")
     message_segment = message.get('message_segment', {})
     message_content = str(message_segment.get('data', ""))
-    bubble.show_message(message_content)
-    
-    # 使用asyncio创建延迟任务
-    delay_seconds = len(message_content) 
-    asyncio.create_task(delayed_fade_out(bubble, delay_seconds))
+    signals_bus.message_received.emit(message_content)  # 跨线程安全
+
 
 async def delayed_fade_out(bubble, delay):
     """异步延迟执行淡出效果"""

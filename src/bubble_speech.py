@@ -17,7 +17,7 @@ class SpeechBubble(QLabel):
         self.setFont(QFont("Arial", 12, QFont.Bold))
         self.corner_radius = 10
         self.arrow_height = 10
-        self.follow_offset = QPoint(0, -50)  # 气泡相对于主体的偏移量
+        self.follow_offset = QPoint(0, -30)  # 气泡相对于主体的偏移量
         
         # 字体设置
         self.setFont(QFont("Microsoft YaHei", 12))
