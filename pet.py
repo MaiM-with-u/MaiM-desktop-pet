@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt, QPoint,QTimer,pyqtSignal,QThread,QPropertyAnimation
 from PyQt5.QtGui import QPixmap,QCursor,QIcon
 
 from bubble_menu import BubbleMenu
-from bubble import SpeechBubble
+from bubble_speech import bubble
 from util import chat_util,logger  # noqa: F401
 from bubble_input import BubbleInput  # 新增导入
 
@@ -21,8 +21,7 @@ class DesktopPet(QWidget):
         self.init_ui()
         self.init_tray_icon()
         #气泡相关
-        self.bubble = SpeechBubble(self)
-        self.bubble.hide()
+        bubble.hide()
 
         self.bubble_menu = BubbleMenu()
         # self.bubble_menu.hide()
@@ -86,15 +85,15 @@ class DesktopPet(QWidget):
     def _on_position_changed(self, pos):
         """接收工作线程发来的新位置并更新窗口"""
         self.move(pos)  # 主线程执行实际的窗口移动
-        self.bubble.update_position()
+        bubble.update_position()
 
     def mouseDoubleClickEvent(self, event):
         asyncio.run(chat_util.easy_to_send("(这是一个类似于摸摸头的友善动作)"))
 
     def show_message(self, text):
         """公开方法：显示气泡消息"""
-        self.bubble.show_message(text)
-        QTimer.singleShot(len(text)*1000, self.bubble.fade_out) 
+        bubble.show_message(text)
+        QTimer.singleShot(len(text)*1000, bubble.fade_out) 
 
     def init_tray_icon(self):
         """初始化系统托盘图标（可选）"""

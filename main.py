@@ -1,19 +1,19 @@
 import sys
 import threading
-import uvicorn
-from api import fastapi
-from pet import chat_pet,app
-from util import logger
+from PyQt5.QtWidgets import QApplication
 
-def run_fastapi():
-    uvicorn.run(fastapi, host="0.0.0.0", port=18002)
+app = QApplication(sys.argv)
 
-global_chat_pet = None
+def run():
+    import asyncio
+    from router import main
+    asyncio.run(main())
 
 if __name__ == "__main__":
-    # 启动 FastAPI 线程
-    api_thread = threading.Thread(target=run_fastapi, daemon=True)
+    # 在单独线程中运行FastAPI
+    api_thread = threading.Thread(target=run, daemon=True)
     api_thread.start()
-    # 启动 Qt
+    
+    from pet import chat_pet
     chat_pet.show()
     sys.exit(app.exec_())

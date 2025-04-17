@@ -116,3 +116,5 @@ class SpeechBubble(QLabel):
         
         self.move(new_x, new_y)
         self.update()  # 触发重绘以更新箭头方向
+
+bubble = SpeechBubble()

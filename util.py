@@ -3,6 +3,7 @@ import logging
 import httpx
 from config import Config
 import time
+from router import router
 
 logging.basicConfig(
     level=logging.DEBUG,  # 设置日志级别
@@ -42,23 +43,10 @@ class chat:
         
         message_base = MessageBase(message_info,message_seg,raw_message=text)
 
-        payload = message_base.to_dict()
+
         # logger.info(payload)
         logger.info("消息发送成功")
+        await router.send_message(message_base)
 
-        response = await self.client.post(
-            config.Fastapi_url,
-            json=payload,
-            headers={"Content-Type": "application/json"}
-        )
-        
-        # 检查响应状态
-        if response.status_code != 200:
-            logger.error(f"FastAPI返回错误状态码: {response.status_code}")
-            logger.debug(f"响应内容: {response.text}")
-        else:
-            response_data = response.json()
-            logger.info(f"收到服务端响应: {response_data}")
-            logger.debug(f"响应内容: {response_data}")
 
 chat_util = chat()
