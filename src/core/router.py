@@ -5,14 +5,18 @@ from maim_message import (
     RouteConfig,
     TargetConfig,
 )
+from config import Config
+
+config = Config()
+
 
 # 配置路由config 
 # 从RouteConfig类构建route_config实例
 route_config = RouteConfig( 
     #根据TargetConfig类构建一个合法的route_config
     route_config={
-        "desktop-pet": TargetConfig( 
-            url="ws://127.0.0.1:8000/ws",
+        config.platfrom: TargetConfig( 
+            url= config.url ,
             token=None,  # 如果需要token验证则在这里设置
         ),
     #     # 可配置多个平台连接
