@@ -6,7 +6,7 @@ app = QApplication(sys.argv)
 
 def run():
     import asyncio
-    from router import main
+    from src.core.router import main
     asyncio.run(main())
 
 if __name__ == "__main__":
@@ -14,6 +14,6 @@ if __name__ == "__main__":
     api_thread = threading.Thread(target=run, daemon=True)
     api_thread.start()
     
-    from pet import chat_pet
+    from src.core.pet import chat_pet
     chat_pet.show()
     sys.exit(app.exec_())

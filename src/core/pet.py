@@ -1,15 +1,17 @@
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget,QMenu,QSystemTrayIcon
-from PyQt5.QtCore import Qt, QPoint,QTimer,pyqtSignal,QThread,QPropertyAnimation,QEasingCurve,QSize
+from PyQt5.QtCore import Qt,QTimer,QThread,QPropertyAnimation,QEasingCurve,QSize
 from PyQt5.QtGui import QPixmap,QCursor,QIcon
 
-from bubble_menu import BubbleMenu
-from bubble_speech import SpeechBubble
-from chat import chat_util  # noqa: F401
-from bubble_input import BubbleInput  # 新增导入
-from signals import signals_bus
-from ScreenshotSelector import ScreenshotSelector
-from util.logger import logger
-from util.image_util import pixmap_to_base64
+from src.core.chat import chat_util  # noqa: F401
+from src.core.signals import signals_bus
+
+from src.features.bubble_menu import BubbleMenu
+from src.features.bubble_speech import SpeechBubble
+from src.features.bubble_input import BubbleInput  # 新增导入
+from src.features.ScreenshotSelector import ScreenshotSelector
+
+from src.util.logger import logger  # noqa: F401
+from src.util.image_util import pixmap_to_base64
 
 import asyncio
 import sys

@@ -1,9 +1,9 @@
-from maim_message import GroupInfo,UserInfo,Seg,MessageBase,BaseMessageInfo
+from maim_message import UserInfo,Seg,MessageBase,BaseMessageInfo
 import httpx
-from src.config import Config
+from config import Config
 import time
-from router import router
-from util.logger import logger
+from src.core.router import router
+from src.util.logger import logger
 
 client = httpx.AsyncClient(timeout=60)  # 创建异步HTTP客户端
 config = Config()

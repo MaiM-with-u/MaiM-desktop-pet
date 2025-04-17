@@ -25,3 +25,56 @@
    └─ util.cpython-311.pyc
 
 ```
+```
+桌宠开发
+├─ data
+├─ img
+│  ├─ maim.png
+│  ├─ maimai.png
+│  └─ small_maimai.png
+├─ README.md
+├─ src
+│  ├─ bubble_input.py
+│  ├─ bubble_menu.py
+│  ├─ bubble_speech.py
+│  ├─ chat.py
+│  ├─ config.py
+│  ├─ main.py
+│  ├─ pet.py
+│  ├─ router.py
+│  ├─ ScreenshotSelector.py
+│  ├─ signals.py
+│  └─ util
+│     ├─ image_util.py
+│     └─ logger.py
+└─ view
+
+```
+```
+桌宠开发
+├─ config.py
+├─ data
+├─ img
+│  ├─ maim.png
+│  ├─ maimai.png
+│  └─ small_maimai.png
+├─ main.py
+├─ README.md
+├─ src
+│  ├─ core
+│  │  ├─ chat.py
+│  │  ├─ pet.py
+│  │  ├─ router.py
+│  │  └─ signals.py
+│  ├─ features
+│  │  ├─ bubble_input.py
+│  │  ├─ bubble_menu.py
+│  │  ├─ bubble_speech.py
+│  │  └─ ScreenshotSelector.py
+│  ├─ util
+│  │  ├─ image_util.py
+│  │  └─ logger.py
+│  └─ __init__.py
+└─ view
+
+```

@@ -1,5 +1,5 @@
 import asyncio
-from signals import signals_bus
+from src.core.signals import signals_bus
 from maim_message import (
     Router,
     RouteConfig,
