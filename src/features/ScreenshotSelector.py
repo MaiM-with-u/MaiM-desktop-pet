@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QApplication
-from PyQt5.QtCore import Qt, QRect, QPoint ,QRectF
-from PyQt5.QtGui import QPainter, QColor, QPen, QScreen, QPixmap,QPainterPath 
+from PyQt5.QtCore import Qt, QRect,QRectF
+from PyQt5.QtGui import QPainter, QColor, QPen,QPainterPath 
 
 class ScreenshotSelector(QWidget):
     def __init__(self):
