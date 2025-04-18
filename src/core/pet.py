@@ -13,14 +13,12 @@ from src.features.ScreenshotSelector import ScreenshotSelector
 from src.util.logger import logger  # noqa: F401
 from src.util.image_util import pixmap_to_base64
 
-from config import Config
+from config import config
 
 import asyncio
 import sys
 from datetime import datetime  # 正确导入方式 # noqa: F401
 import platform 
-
-config = Config()
 
 app = QApplication(sys.argv)
 

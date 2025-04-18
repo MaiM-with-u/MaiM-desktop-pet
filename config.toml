@@ -1,0 +1,5 @@
+url = "ws://127.0.0.1:8000/ws"
+Nickname = "麦麦"
+userNickname = ""
+platfrom = "desktop-pet"
+hide_console = false

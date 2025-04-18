@@ -5,9 +5,9 @@ from maim_message import (
     RouteConfig,
     TargetConfig,
 )
-from config import Config
+from config import config
 
-config = Config()
+
 
 
 # 配置路由config 
