@@ -1,16 +1,14 @@
 from maim_message import UserInfo,Seg,MessageBase,BaseMessageInfo
-import httpx
+
 from config import config
 import time
 from src.core.router import router
 from src.util.logger import logger
 
-client = httpx.AsyncClient(timeout=60)  # 创建异步HTTP客户端
+
 
 
 class chat:
-    def __init__(self) -> None:
-        self.client = httpx.AsyncClient(timeout=60)  # 创建异步HTTP客户端
 
     async def easy_to_send (self,text : str,type:str):
         user_info = UserInfo(
