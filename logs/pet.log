@@ -1,0 +1,64 @@
+2025-04-18 09:46:34,251 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:46:34,251 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:46:34,524 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:46:34,524 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:46:34,795 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:46:34,796 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:46:35,081 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:46:35,082 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:46:35,351 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:46:35,352 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:46:35,636 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:46:35,637 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:46:36,209 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:46:37,124 - pet - INFO - 检测到平台 desktop-pet 连接断开，尝试重连...
+2025-04-18 09:46:37,124 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-18 09:46:39,166 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:46:42,130 - pet - INFO - 检测到平台 desktop-pet 连接断开，尝试重连...
+2025-04-18 09:46:42,130 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-18 09:48:46,987 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:48:46,988 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:48:47,258 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:48:47,258 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:48:47,540 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:48:47,542 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:48:47,814 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:48:47,815 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:48:48,088 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:48:48,089 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:48:48,356 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:48:48,357 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:48:48,933 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:48:49,882 - pet - INFO - 检测到平台 desktop-pet 连接断开，尝试重连...
+2025-04-18 09:48:49,882 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-18 09:48:51,910 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:48:54,887 - pet - INFO - 检测到平台 desktop-pet 连接断开，尝试重连...
+2025-04-18 09:48:54,887 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-18 09:48:56,934 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:48:59,899 - pet - INFO - 检测到平台 desktop-pet 连接断开，尝试重连...
+2025-04-18 09:48:59,899 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-18 09:49:01,940 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:49:04,901 - pet - INFO - 检测到平台 desktop-pet 连接断开，尝试重连...
+2025-04-18 09:49:04,901 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-18 09:49:06,931 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:49:09,897 - pet - INFO - 检测到平台 desktop-pet 连接断开，尝试重连...
+2025-04-18 09:49:09,898 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-18 09:49:11,951 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:49:14,306 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:49:14,307 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:49:14,576 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:49:14,577 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:49:14,842 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:49:14,843 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:49:15,113 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:49:15,114 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:49:15,379 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:49:15,380 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:49:15,647 - httpx - DEBUG - load_ssl_context verify=True cert=None trust_env=True http2=False
+2025-04-18 09:49:15,648 - httpx - DEBUG - load_verify_locations cafile='C:\\Users\\Maple\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\certifi\\cacert.pem'
+2025-04-18 09:49:16,225 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:49:17,204 - pet - INFO - 检测到平台 desktop-pet 连接断开，尝试重连...
+2025-04-18 09:49:17,204 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-18 09:49:19,249 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]
+2025-04-18 09:49:22,213 - pet - INFO - 检测到平台 desktop-pet 连接断开，尝试重连...
+2025-04-18 09:49:22,213 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws

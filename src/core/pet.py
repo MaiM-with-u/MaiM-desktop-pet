@@ -13,10 +13,14 @@ from src.features.ScreenshotSelector import ScreenshotSelector
 from src.util.logger import logger  # noqa: F401
 from src.util.image_util import pixmap_to_base64
 
+from config import Config
+
 import asyncio
 import sys
 from datetime import datetime  # 正确导入方式 # noqa: F401
+import platform 
 
+config = Config()
 
 app = QApplication(sys.argv)
 
@@ -49,6 +53,10 @@ class DesktopPet(QWidget):
 
         self.screenshot_selector = None
 
+        if config.hide_console:
+            self.show_message("终端藏在托盘栏咯，进入托盘栏打开叭")
+
+        
     #主窗口初始化相关
     def init_ui(self):
 
@@ -74,39 +82,100 @@ class DesktopPet(QWidget):
         self.move(x, y)
 
     def init_tray_icon(self):
-        """初始化系统托盘图标"""
+        """初始化系统托盘图标（增加终端控制功能）"""
         self.tray_icon = QSystemTrayIcon(self)
-        self.tray_icon.setIcon(QIcon("./img/maim.png"))  # 托盘图标
+        self.tray_icon.setIcon(QIcon("./img/maim.png"))
         self.tray_icon.setToolTip("桌面宠物")
         
-        # 托盘菜单
+        # 获取终端窗口句柄（Windows专用）
+        self.console_visible = True  # 默认终端可见
+        if platform.system() == "Windows":
+            import win32gui # noqa: E401
+            self.console_window = win32gui.GetForegroundWindow()
+        else:
+            self.console_window = None
+        
+        # 托盘菜单（保持原有样式）
         tray_menu = QMenu()
         tray_menu.setStyleSheet("""
             QMenu {
-                background-color: #f0f0f0;  /* 背景色 */
-                border: 1px solid #ccc;    /* 边框 */
-                border-radius: 5px;       /* 圆角 */
-                padding: 5px;             /* 内边距 */
+                background-color: #f0f0f0;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                padding: 5px;
             }
             QMenu::item {
-                padding: 5px 20px;        /* 菜单项内边距 */
-                color: #333;              /* 文字颜色 */
+                padding: 5px 20px;
+                color: #333;
             }
             QMenu::item:selected {
-                background-color: #4CAF50; /* 选中项背景 */
-                color: white;             /* 选中项文字颜色 */
+                background-color: #4CAF50;
+                color: white;
             }
             QMenu::item:disabled {
-                color: #999;             /* 禁用项颜色 */
+                color: #999;
             }
         """)
+        
+        # 宠物控制
         show_action = tray_menu.addAction("显示宠物")
         show_action.triggered.connect(self.show_pet)
+        
+        # 终端控制按钮
+        self.toggle_term_action = tray_menu.addAction("隐藏终端")  # 初始状态为隐藏终端
+        self.toggle_term_action.triggered.connect(self.toggle_console)
+        
+        # 退出
+        tray_menu.addSeparator()
         exit_action = tray_menu.addAction("退出")
-        exit_action.triggered.connect(QApplication.quit)
+        exit_action.triggered.connect(self.safe_quit)
+        
         self.tray_icon.setContextMenu(tray_menu)
         self.tray_icon.show()
- 
+        self.update_terminal_menu_state()
+        if config.hide_console:
+            self.hide_console()
+        
+
+    def toggle_console(self):
+        """切换终端窗口的显示和隐藏状态"""
+        if self.console_visible:
+            self.hide_console()
+        else:
+            self.show_console()
+        self.update_terminal_menu_state()
+
+    def show_console(self):
+        """显示终端窗口"""
+        if platform.system() == "Windows":
+            import win32gui, win32con  # noqa: E401
+            win32gui.ShowWindow(self.console_window, win32con.SW_SHOW)
+        else:
+            print("\n[终端已显示 - 输入Ctrl+C退出]\n")
+        self.console_visible = True
+        self.update_terminal_menu_state()
+
+    def hide_console(self):
+        """隐藏终端窗口"""
+        if platform.system() == "Windows":
+            import win32gui, win32con # noqa: E401
+            win32gui.ShowWindow(self.console_window, win32con.SW_HIDE)
+        self.console_visible = False
+        self.update_terminal_menu_state()
+
+    def update_terminal_menu_state(self):
+        """更新终端控制按钮的文本"""
+        if self.console_visible:
+            self.toggle_term_action.setText("隐藏终端")
+        else:
+            self.toggle_term_action.setText("显示终端")
+
+    def safe_quit(self):
+        """安全退出程序（恢复终端显示）"""
+        if not self.console_visible:
+            self.show_console()
+        QApplication.quit()
+
     #移动相关线程
     def mousePressEvent(self, event):
         """鼠标按下时创建工作线程"""
@@ -115,7 +184,7 @@ class DesktopPet(QWidget):
             self.drag_start_position = event.globalPos() - self.frameGeometry().topLeft()
         if event.button() == Qt.LeftButton and not self._move_worker:
             # 创建并启动工作线程
-            self._move_worker = MoveWorker(self.drag_start_position)
+            self._move_worker = MoveWorker(self.drag_start_position,self)
             signals_bus.position_changed.connect(self._on_position_changed)
             self._move_worker.start()
             event.accept()
@@ -247,22 +316,27 @@ class PetScreenshotSelector(ScreenshotSelector):
         self.pet.handle_screenshot(pixmap)
 
 # 移动管理器
-class MoveWorker(QThread):
 
-    def __init__(self, start_pos):
+class MoveWorker(QThread):
+    def __init__(self, start_pos, pet_widget):
         super().__init__()
         self.start_pos = start_pos  # 存储拖动起始偏移量
         self._active = True  # 线程运行状态标志
-    
+        self.pet_widget = pet_widget  # 桌宠控件
+
     def run(self):
         """线程主循环"""
         while self._active:
-            # logger.info("在拖动")
+            # 检查桌宠是否是焦点目标
+            if not self.pet_widget.isActiveWindow():
+                self.stop()
+                break
+
             current_pos = QCursor.pos()  # 获取当前光标位置
             new_pos = current_pos - self.start_pos  # 计算新窗口位置
             signals_bus.position_changed.emit(new_pos)  # 发送信号
             self.msleep(8)  # 控制更新频率(~120fps)
-    
+
     def stop(self):
         """安全停止线程"""
         self._active = False

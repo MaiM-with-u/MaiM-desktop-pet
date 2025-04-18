@@ -10,10 +10,14 @@ def run():
     asyncio.run(main())
 
 if __name__ == "__main__":
-    # 在单独线程中运行FastAPI
-    api_thread = threading.Thread(target=run, daemon=True)
-    api_thread.start()
-    
-    from src.core.pet import chat_pet
-    chat_pet.show()
-    sys.exit(app.exec_())
+    try:
+        # 在单独线程中运行 FastAPI
+        api_thread = threading.Thread(target=run, daemon=True)
+        api_thread.start()
+        
+        from src.core.pet import chat_pet
+        chat_pet.show()
+        sys.exit(app.exec_())
+    except KeyboardInterrupt:
+        print("\n程序正在退出...")
+        sys.exit(0)

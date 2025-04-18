@@ -43,7 +43,7 @@ class SpeechBubble(QLabel):
         
         # 绘制文字
         painter.setPen(self.text_color)
-        painter.drawText(body_rect, Qt.AlignCenter, self.text())
+        painter.drawText(body_rect, Qt.AlignCenter | Qt.TextWordWrap, self.text())
 
     def calculate_bubble_size(self, text):
         metrics = self.fontMetrics()
