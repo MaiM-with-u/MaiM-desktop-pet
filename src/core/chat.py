@@ -1,4 +1,4 @@
-from maim_message import UserInfo,Seg,MessageBase,BaseMessageInfo
+from maim_message import UserInfo,Seg,MessageBase,BaseMessageInfo,FormatInfo
 
 from config import config
 import time
@@ -9,6 +9,14 @@ from src.util.logger import logger
 
 
 class chat:
+    def __init__(self):
+        self.format_info = FormatInfo(
+            # 消息内容中包含的Seg的type列表
+            content_format=["text", "image", "emoji"],
+            # 消息发出后，期望最终的消息中包含的消息类型，可以帮助某些plugin判断是否向消息中添加某些消息类型
+            accept_format=["text"],
+        )
+
 
     async def easy_to_send (self,text : str,type:str):
         user_info = UserInfo(
@@ -24,7 +32,8 @@ class chat:
             time = int(time.time()),
             group_info= None,
             user_info = user_info,
-            additional_config={"maimcore_reply_probability_gain": 1}
+            additional_config={"maimcore_reply_probability_gain": 1},
+            format_info=self.format_info,
     )
         message_seg = Seg(
             type = type,
