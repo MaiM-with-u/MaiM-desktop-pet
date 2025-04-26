@@ -13,14 +13,6 @@ set CYAN=%ESC%96m
 set WHITE=%ESC%97m
 set RESET=%ESC%0m
 
-REM ==============================================
-REM 智能启动脚本（跳过已安装的maim_message）
-REM 功能：
-REM 1. 仅首次运行时安装maim_message（开发模式）
-REM 2. 自动检查并安装其他依赖（如tomli）
-REM 3. 更快的启动速度（跳过重复安装）
-REM ==============================================
-
 :INIT
 echo.
 echo %BLUE%[INFO]%RESET%%WHITE% 正在初始化桌宠系统...%RESET%
@@ -62,32 +54,6 @@ pip show tomli >nul 2>&1 || (
     pip install tomli -i https://pypi.tuna.tsinghua.edu.cn/simple --quiet
 )
 
-REM ==============================================
-REM 仅首次安装maim_message（通过标记文件判断）
-REM ==============================================
-
-:CHECK_MAIM_MSG
-if not exist "maim_message\pyproject.toml" goto RUN_MAIN
-
-REM 检查标记文件（存在则跳过安装）
-if exist ".maim_msg_installed" (
-    echo %GREEN%[INFO]%RESET%%WHITE% 检测到maim_message已安装，跳过...%RESET%
-    goto RUN_MAIN
-)
-
-echo %BLUE%[INFO]%RESET%%WHITE% 首次运行，正在安装maim_message（开发模式）...%RESET%
-cd maim_message
-pip install -e . --quiet
-cd ..
-if %errorlevel% neq 0 (
-    echo %RED%[ERROR]%RESET%%WHITE% maim_message安装失败%RESET%
-    pause
-    exit /b 1
-)
-
-REM 创建标记文件（避免重复安装）
-echo Installed at %date% %time% > .maim_msg_installed
-echo %GREEN%[SUCCESS]%RESET%%WHITE% maim_message安装完成%RESET%
 
 REM ==============================================
 REM 启动主程序

@@ -1,4 +1,4 @@
-url = "ws://127.0.0.1:8000/ws"  #填入与maim port相同的端口号
+url = "ws://127.0.0.1:8000/ws"  #填入与maim port相同的端口号，默认可以不动
 Nickname = "麦麦"                 #你的bot昵称
 userNickname = ""                #你的昵称
 platfrom = "desktop-pet"        #如果你不知道这个是什么的，那你就不要修改
