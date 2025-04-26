@@ -203,3 +203,21 @@
 2025-04-26 14:13:23,082 - asyncio - DEBUG - Using proactor: IocpProactor
 2025-04-26 14:13:23,084 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
 2025-04-26 14:13:23,086 - pet - INFO - 已连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:34:44,375 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-04-26 14:34:44,377 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:34:44,380 - pet - INFO - 已连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:34:58,213 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-04-26 14:34:58,214 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:34:58,218 - pet - INFO - 已连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:35:10,817 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-04-26 14:35:10,818 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:35:10,822 - pet - INFO - 已连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:37:00,328 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-04-26 14:37:00,329 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:37:00,333 - pet - INFO - 已连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:37:15,585 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-04-26 14:37:15,587 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-26 14:37:15,591 - pet - INFO - 已连接到 ws://127.0.0.1:8000/ws
+2025-04-26 15:38:34,298 - asyncio - DEBUG - Using proactor: IocpProactor
+2025-04-26 15:38:34,300 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
+2025-04-26 15:38:36,332 - pet - INFO - 连接失败 (0): Cannot connect to host 127.0.0.1:8000 ssl:default [远程计算机拒绝网络连接。]

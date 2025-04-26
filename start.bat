@@ -1,7 +1,6 @@
 @echo off
 chcp 65001 > nul
 title 桌宠一键启动工具
-color 17  :: 蓝色背景(1)，白色文字(7)
 
 REM 定义颜色变量（调整为适合蓝色背景的颜色）
 set ESC=[
