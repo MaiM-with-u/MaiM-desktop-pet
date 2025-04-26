@@ -23,37 +23,6 @@
 - Python 3.8+
 - Windows/Linux/MacOS
 
-## 部署步骤
-
-由于依赖于MMC（MaiMBot Core），因此你需要先根据[麦麦Bot部署文档](https://docs.mai-mai.org/manual/deployment/mmc_deploy.html)将MMC启动起来。
-
-启动MMC之后，如果你未修改配置文件，则默认使用`127.0.0.1:8000`作为MMC的websocket地址
-
-
-1. 克隆项目到本地：
-```bash
-git clone git@github.com:Maple127667/MaiM-desktop-pet.git
-cd MaiM-desktop-pet
-```
-
-2. 安装依赖包：
-
-安装依赖前建议使用虚拟环境，此处默认已使用麦麦部署时的虚拟环境。
-
-```bash
-pip install -r requirements.txt
-```
-
-注意：其中的`maim_message`包需要根据麦麦部署文档中的部署步骤进行安装。
-
-3. 在MMC的配置文件`bot_config.toml`中的[platforms]配置中添加如下内容，并按照MMC部署文档启动MMC
-   
-```toml
-[platforms] # 必填项目，填写每个平台适配器提供的链接
-nonebot-qq = "http://127.0.0.1:18002/api/message" # 默认的配置
-desktop-pet = "http://127.0.0.1:18003/api/message" # 新添加的本项目的配置
-```
-
 ## 运行步骤
 
 1. 一键运行主程序：
@@ -84,6 +53,13 @@ python main.py
 右下角任务栏图标：
 - 显示宠物：将桌宠显示在面板上
 - 显示/隐藏终端: 默认隐藏终端以优化视觉效果，显示终端以方便调试
+
+## 可能会出现的问题
+
+1.Could not load the Qt platform plugin “windows“ in ““ 
+  参考https://blog.csdn.net/weixin_46599926/article/details/132576385
+
+
 ## 项目结构
 
 ```
