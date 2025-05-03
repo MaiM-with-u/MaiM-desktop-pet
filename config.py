@@ -7,6 +7,7 @@ class Config(BaseModel):
     userNickname: str = None
     platfrom: str = "desktop-pet"
     hide_console: bool = True
+    Screenshot_shortcuts: str = None
 
 # 加载 TOML 配置文件
 with open("config.toml", "rb") as f:

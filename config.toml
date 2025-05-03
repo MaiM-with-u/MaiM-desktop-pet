@@ -3,3 +3,4 @@ Nickname = "麦麦"                 #你的bot昵称
 userNickname = ""                #你的昵称
 platfrom = "desktop-pet"        #如果你不知道这个是什么的，那你就不要修改
 hide_console = true             #打开程序的时候是否自动关闭终端
+Screenshot_shortcuts = "Ctrl+Shift+A" #截图快捷键
