@@ -168,4 +168,7 @@ Thumbs.db
 
 # macOS
 .DS_Store
-logs/
+
+# 保留 logs 目录但忽略其中所有内容
+logs/*
+!logs/.gitkeep
