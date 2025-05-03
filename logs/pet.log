@@ -1,3 +1,0 @@
-2025-05-04 01:32:19,824 - asyncio - DEBUG - Using proactor: IocpProactor
-2025-05-04 01:32:19,826 - pet - INFO - 正在连接到 ws://127.0.0.1:8000/ws
-2025-05-04 01:32:19,829 - pet - INFO - 已连接到 ws://127.0.0.1:8000/ws

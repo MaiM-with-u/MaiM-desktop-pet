@@ -168,4 +168,4 @@ Thumbs.db
 
 # macOS
 .DS_Store
-logs/pet.log
+logs/
