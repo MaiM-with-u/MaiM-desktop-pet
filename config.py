@@ -20,4 +20,4 @@ with open("config.toml", "rb") as f:
 config = Config(**config_data)
 
 if config.allow_multiple_source_conversion :
-    config.platform = config.platform + str(uuid.uuid4())
+    config.platform = config.platform + "-" + str(uuid.uuid4())
