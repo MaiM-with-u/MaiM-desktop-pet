@@ -15,7 +15,7 @@ from src.util.logger import logger
 route_config = RouteConfig( 
     #根据TargetConfig类构建一个合法的route_config
     route_config={
-        config.platfrom: TargetConfig( 
+        config.platform: TargetConfig( 
             url= config.url ,
             token=None,  # 如果需要token验证则在这里设置
         ),

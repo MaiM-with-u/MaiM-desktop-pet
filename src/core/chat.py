@@ -2,6 +2,7 @@ from maim_message import UserInfo,Seg,MessageBase,BaseMessageInfo,FormatInfo
 
 from config import config
 import time
+import uuid
 from src.core.router import router
 from src.util.logger import logger
 
@@ -20,14 +21,14 @@ class chat:
 
     async def easy_to_send (self,text : str,type:str):
         user_info = UserInfo(
-            platform = config.platfrom,
+            platform = config.platform,
             user_id=0,#反正得有
             user_nickname = config.userNickname,
             user_cardname = config.userNickname,
         )
 
         message_info = BaseMessageInfo(
-            platform = config.platfrom,
+            platform = config.platform,
             message_id = None,
             time = int(time.time()),
             group_info= None,
