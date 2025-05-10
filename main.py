@@ -1,5 +1,6 @@
 import sys
 import threading
+import src.util.except_hook
 from PyQt5.QtWidgets import QApplication
 
 app = QApplication(sys.argv)
