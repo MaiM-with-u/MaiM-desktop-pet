@@ -73,11 +73,15 @@ class ScreenshotSelector(QWidget):
     def mouseReleaseEvent(self, event):
         """鼠标释放完成截图"""
         if event.button() == Qt.LeftButton and self.start_pos:
-            # 获取屏幕截图
+            # 先隐藏窗口确保截图无遮罩
+            self.hide()  # 关键修改：先隐藏界面
+            QApplication.processEvents()  # 确保界面立即隐藏
+            
+            # 获取屏幕截图（此时窗口已隐藏）
             screen = QApplication.primaryScreen()
             full_pixmap = screen.grabWindow(0)
             
-            # 截取选定区域
+            # 截取选定区域（使用窗口隐藏前记录的坐标）
             selected_pixmap = full_pixmap.copy(self.selection_rect)
             
             # 关闭选择器
