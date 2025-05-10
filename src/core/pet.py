@@ -6,7 +6,7 @@ from src.core.chat import chat_util  # noqa: F401
 from src.core.signals import signals_bus
 
 from src.features.bubble_menu import BubbleMenu
-from src.features.bubble_speech import SpeechBubble
+from src.features.bubble_speech import SpeechBubbleList
 from src.features.bubble_input import BubbleInput  # 新增导入
 from src.features.ScreenshotSelector import ScreenshotSelector
 
@@ -19,6 +19,7 @@ import asyncio
 import sys
 from datetime import datetime  # 正确导入方式 # noqa: F401
 import platform 
+from typing import Literal
 
 app = QApplication(sys.argv)
 
@@ -29,7 +30,7 @@ class DesktopPet(QWidget):
         self.init_tray_icon()
 
         #麦麦气泡初始化
-        self.chat_bubbles:list[SpeechBubble] = []
+        self.chat_bubbles = SpeechBubbleList(parent=self)
 
         #右键菜单初始化
         self.bubble_menu = BubbleMenu()
@@ -208,26 +209,25 @@ class DesktopPet(QWidget):
         self.move(pos)
         if self.bubble_input.isVisible():
             self.bubble_input.update_position()
-        for chat_bubble in self.chat_bubbles:
-            chat_bubble.update_position()
+        for bubble in self.chat_bubbles._active_bubbles:
+            if bubble.isVisible():
+                self.chat_bubbles.update_position()
 
     #鼠标双击逻辑
     def mouseDoubleClickEvent(self, event):
-        asyncio.run(chat_util.easy_to_send("(这是一个类似于摸摸头的友善动作)","text"))
+        # asyncio.run(chat_util.easy_to_send("(这是一个类似于摸摸头的友善动作)","text"))
+        self.show_message(text="recev",type="received")
+        self.show_message(text="sent",type="sent")
 
     #消息显示逻辑
-    def show_message(self, text = None , type = "received"):
+    def show_message(self, text = None , type:Literal["received", "sent"] = "received",pixmap:QPixmap=None):
         """公开方法：显示气泡消息"""
-        new_chat_bubble = SpeechBubble(parent=self,bubble_type=type)
-        new_chat_bubble.show_message(text)
-        self.chat_bubbles.append(new_chat_bubble)
-        for chat_bubble in self.chat_bubbles:
-            chat_bubble.update_position()
+        self.chat_bubbles.add_message(message=text , msg_type = type,pixmap=pixmap)
         QTimer.singleShot(25000, self.del_message_bubble) 
 
+
     def del_message_bubble(self):
-        self.chat_bubbles[0].hide()
-        del self.chat_bubbles[0]
+        self.chat_bubbles.del_first_msg()
     
     #基础桌宠行为
     def hide_pet(self):
@@ -289,20 +289,21 @@ class DesktopPet(QWidget):
     def start_screenshot(self):
         """启动区域截图"""
         self.hide()  # 隐藏宠物避免干扰
-        for chat_bubble in self.chat_bubbles:
+        for chat_bubble in self.chat_bubbles._active_bubbles:
             chat_bubble.hide()
         # 创建选择器（需继承ScreenshotSelector）
         self.screenshot_selector = PetScreenshotSelector(self)
         self.screenshot_selector.show()
 
-    def handle_screenshot(self, pixmap):
+    def handle_screenshot(self, pixmap:QPixmap):
         """处理截图结果"""
         self.show()  # 重新显示宠物
-        for chat_bubble in self.chat_bubbles:
+        for chat_bubble in self.chat_bubbles._active_bubbles:
             chat_bubble.show()
         # 显示在气泡中
         # self.bubble.setPixmap(pixmap.scaled(200, 200, Qt.KeepAspectRatio))
-        
+        print(pixmap)
+        self.show_message(pixmap=pixmap,type="sent")
         base64_str = pixmap_to_base64(pixmap)
         asyncio.run(chat_util.easy_to_send(base64_str,"image"))
         # 保存文件
