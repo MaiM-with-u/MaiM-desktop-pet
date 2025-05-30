@@ -1,3 +1,4 @@
+import random
 from PyQt5.QtWidgets import QApplication, QLabel, QWidget,QMenu,QSystemTrayIcon,QShortcut
 from PyQt5.QtCore import Qt,QTimer,QThread,QPropertyAnimation,QEasingCurve,QSize
 from PyQt5.QtGui import QPixmap,QCursor,QIcon,QKeySequence
@@ -322,7 +323,8 @@ class DesktopPet(QWidget):
         """开始窥屏"""
         if not self.is_peeking:
             self.is_peeking = True
-            self.peek_timer.start(10000)  # 10秒
+            random_time = random.randint(10, 30)
+            self.peek_timer.start(random_time * 1000)  # 10秒
             self.show_message("开始窥屏啦~", type="received")
         else:
             self.stop_peeking()
