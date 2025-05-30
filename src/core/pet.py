@@ -42,10 +42,10 @@ class DesktopPet(QWidget):
 
         self._move_worker = None  # 工作线程引用
 
-        # 定时器（未启用）
-        # self.thinktimer = QTimer(self)
-        # self.thinktimer.timeout.connect(self._on_timer_triggered)  # 连接信号
-        # self.thinktimer.start(60 * 1000)  # 60秒（单位：毫秒）
+        # 窥屏定时器
+        self.peek_timer = QTimer(self)
+        self.peek_timer.timeout.connect(self._on_peek_timer)
+        self.is_peeking = False  # 窥屏状态标志
 
         #快捷键
         if config.Screenshot_shortcuts is not None :
@@ -254,6 +254,7 @@ class DesktopPet(QWidget):
             ("🐾 隐藏", self.hide),
             ("✏️ 聊聊天", self.show_chat_input),  
             ("📸 截图", self.start_screenshot),
+            ("👀 麦麦窥屏", self.start_peeking) if not self.is_peeking else ("⏹️ 停止窥屏", self.stop_peeking),
             ("❌ 退出", QApplication.quit),
         ]
 
@@ -261,7 +262,7 @@ class DesktopPet(QWidget):
             action = menu.addAction(text)
             action.triggered.connect(callback)
 
-        menu.exec_(event.globalPos()) 
+        menu.exec_(event.globalPos())
 
     def add_hover_animation(self, action):
         """为菜单项添加悬停动画"""
@@ -316,6 +317,32 @@ class DesktopPet(QWidget):
         # 这里添加你的业务逻辑，例如：
         # self.check_updates()
         # self.auto_save()
+
+    def start_peeking(self):
+        """开始窥屏"""
+        if not self.is_peeking:
+            self.is_peeking = True
+            self.peek_timer.start(10000)  # 10秒
+            self.show_message("开始窥屏啦~", type="received")
+        else:
+            self.stop_peeking()
+
+    def stop_peeking(self):
+        """停止窥屏"""
+        if self.is_peeking:
+            self.is_peeking = False
+            self.peek_timer.stop()
+            self.show_message("停止窥屏啦~", type="received")
+
+    def _on_peek_timer(self):
+        """定时器触发时的截图操作"""
+        if self.is_peeking:
+            # 获取主屏幕
+            screen = QApplication.primaryScreen()
+            # 截取全屏
+            pixmap = screen.grabWindow(0)
+            # 处理截图
+            self.handle_screenshot(pixmap)
 
 
 
