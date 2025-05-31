@@ -61,7 +61,7 @@ class DesktopPet(QWidget):
             self.show_message("终端藏在托盘栏咯，进入托盘栏打开叭")
 
         
-    #主窗口初始化相关
+     #主窗口初始化相关
     def init_ui(self):
 
         # 设置窗口属性
@@ -93,6 +93,7 @@ class DesktopPet(QWidget):
         
         # 获取终端窗口句柄（Windows专用）
         self.console_visible = True  # 默认终端可见
+        self.is_lock = False #默认桌宠不锁定
         if platform.system() == "Windows":
             import win32gui # noqa: E401
             self.console_window = win32gui.GetForegroundWindow()
@@ -129,6 +130,11 @@ class DesktopPet(QWidget):
         self.toggle_term_action = tray_menu.addAction("隐藏终端")  # 初始状态为隐藏终端
         self.toggle_term_action.triggered.connect(self.toggle_console)
         
+        # 锁定按钮
+        self.lock_action = tray_menu.addAction("锁定桌宠")  # 初始状态为隐藏终端
+        self.lock_action.triggered.connect(self.toggle_lock)
+
+
         # 退出
         tray_menu.addSeparator()
         exit_action = tray_menu.addAction("退出")
@@ -161,6 +167,7 @@ class DesktopPet(QWidget):
 
     def hide_console(self):
         """隐藏终端窗口"""
+        self.toggle_lock = True
         if platform.system() == "Windows":
             import win32gui, win32con # noqa: E401
             win32gui.ShowWindow(self.console_window, win32con.SW_HIDE)
@@ -179,6 +186,46 @@ class DesktopPet(QWidget):
         if not self.console_visible:
             self.show_console()
         QApplication.quit()
+
+    def toggle_lock(self):
+        if self.is_lock:
+            self.unlock_window()
+        else:
+            self.lock_window()
+        self.update_lock_menu_state()
+
+    def hide_all_bubble(self):
+        self.bubble_input.hide()
+        self.bubble_menu.hide()
+
+    def lock_window(self):
+        """锁定窗口，使其不可选中"""
+        self.setWindowFlags(
+            Qt.FramelessWindowHint |  # 无边框
+            Qt.WindowStaysOnTopHint |  # 始终在最前
+            Qt.SubWindow |            # 子窗口
+            Qt.WindowTransparentForInput  # 关键标志：使窗口不接收输入事件
+        )
+        #需要额外关闭掉输入栏和选项栏
+        self.is_lock = True
+        self.hide_all_bubble()
+        self.show()  # 必须调用show()才能使窗口标志更改生效
+
+    def unlock_window(self):
+        """解锁窗口，恢复原始可选中状态"""
+        self.setWindowFlags(
+            Qt.FramelessWindowHint |  # 无边框
+            Qt.WindowStaysOnTopHint |  # 始终在最前
+            Qt.SubWindow              # 子窗口
+        )
+        self.is_lock = False
+        self.show()  # 必须调用show()才能使窗口标志更改生效
+
+    def update_lock_menu_state(self):
+        if self.is_lock:
+            self.lock_action.setText("解锁桌宠")
+        else:
+            self.lock_action.setText("锁定桌宠")
 
     #移动相关线程
     def mousePressEvent(self, event):
