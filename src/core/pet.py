@@ -263,9 +263,9 @@ class DesktopPet(QWidget):
 
     #鼠标双击逻辑
     def mouseDoubleClickEvent(self, event):
-        # asyncio.run(chat_util.easy_to_send("(这是一个类似于摸摸头的友善动作)","text"))
-        self.show_message(text="recev",type="received")
-        self.show_message(text="sent",type="sent")
+        asyncio.run(chat_util.easy_to_send("(这是一个类似于摸摸头的友善动作)","text"))
+        # self.show_message(text="recev",type="received")
+        # self.show_message(text="sent",type="sent")
 
     #消息显示逻辑
     def show_message(self, text = None , type:Literal["received", "sent"] = "received",pixmap:QPixmap=None):
